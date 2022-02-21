@@ -1,0 +1,30 @@
+{
+    "name": "@plcmp/pl-input",
+    "version": "0.0.1",
+    "description": "Simple input component.",
+    "main": "pl-input.js",
+    "repository": {
+        "url": "https://github.com/plcmp/pl-input.git"
+    },
+    "license": "MIT",
+    "type": "module",
+    "author": {
+        "name": "Azat Yamalov",
+        "email": "yamalov.azat@live.com"
+    },
+    "contributors": [
+        {
+            "name": "Dmitry Boikov",
+            "email": "boikovdv@gmail.com"
+        },
+        {
+            "name": "Andrey Maksimov",
+            "email": "andrmaxmail@gmail.com"
+        }
+    ],
+    "dependencies": {
+        "polylib": "^1.0.0",
+        "@plcmp/pl-labeled-container": "^0.0.1",
+        "@plcmp/utils": "^0.0.1"
+    }
+}
