@@ -7,7 +7,7 @@ class PlInput extends PlElement {
     static get properties() {
         return {
             label: { type: String },
-            variant: { type: String, value: 'vertical' },
+            variant: { type: String, variant: 'vertical', reflectToAttribute: true },
             type: { type: String, value: 'text' },
             value: { type: String, observer: '_valueObserver' },
             title: { type: String },
@@ -22,13 +22,33 @@ class PlInput extends PlElement {
 
             required: { type: Boolean, observer: '_requiredObserver' },
             invalid: { type: Boolean },
-            
-            disabled: { type: Boolean, reflectToAttribute: true }
+
+            disabled: { type: Boolean, reflectToAttribute: true },
+            stretch: { type: Boolean, reflectToAttribute: true },
+            hidden: { type: Boolean, reflectToAttribute: true }
         };
     }
 
     static get css() {
         return css`
+            :host {
+                display: flex;
+                outline: none;
+                width: var(--content-width);
+            }
+
+            :host([hidden]) {
+                display: none;
+            }
+
+            :host([variant=horizontal]) {
+                width: calc(var(--label-width) + var(--content-width));
+            }
+
+            :host([stretch]) {
+                width: 100%;
+            }
+
             :host(:hover) .input-container, :host(:hover) .input-container.required.invalid{
                 border: 1px solid var(--primary-dark);
 			}
@@ -67,7 +87,7 @@ class PlInput extends PlElement {
 			.input-container {
                 display: flex;
 				height: 32px;
-				width: var(--content-width, 200px);
+				width: 100%;
                 flex-direction: row;
                 box-sizing: border-box;
 				overflow: hidden;
@@ -143,10 +163,15 @@ class PlInput extends PlElement {
 				color: var(--grey-base);
                 background: var(--grey-lightest);
             }
+
+            pl-labeled-container {
+                width: inherit;
+                position: relative;
+            }
     	`;
     }
 
-    _requiredObserver(){
+    _requiredObserver() {
         this.validate();
     }
 
@@ -158,17 +183,9 @@ class PlInput extends PlElement {
                     <span class="prefix">
                         <slot name="prefix"></slot>
                     </span>
-                    <input
-                        value="[[fixText(value)]]"
-                        placeholder="[[placeholder]]"
-                        type="[[type]]"
-                        title="[[_getTitle(value, title, type)]]"
-                        min$="[[min]]" 
-                        max$="[[max]]"
-                        step$="[[step]]"
-                        tabindex$="[[_getTabIndex(disabled)]]"
-                        on-focus="[[_onFocus]]"
-                        on-input="[[_onInput]]">
+                    <input value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
+                        title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
+                        tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
                     <span class="suffix">
                         <slot name="suffix"></slot>
                     </span>
@@ -191,7 +208,7 @@ class PlInput extends PlElement {
     }
 
     _getTitle(val, title, type) {
-        if(type === 'password') {
+        if (type === 'password') {
             return '';
         };
 
@@ -206,10 +223,10 @@ class PlInput extends PlElement {
         return t;
     }
     _onInput() {
-        let debouncer = debounce(() => { 
+        let debouncer = debounce(() => {
             if (this.type == 'number') {
                 this.value = this._nativeInput.value !== '' ? this._nativeInput.valueAsNumber : null;
-            } else  {
+            } else {
                 this.value = this._nativeInput.value;
             }
         }, 50)
@@ -258,12 +275,12 @@ class PlInput extends PlElement {
                 messages.push(`Значение превышает минимальное значение равное ${this.min}`);
             }
 
-            if (this.max && parseInt(this.max) < value && value) { 
+            if (this.max && parseInt(this.max) < value && value) {
                 messages.push(`Значение превышает максимальное значение равное ${this.max}`);
             }
         }
 
-        if(!value && this.required) {
+        if (!value && this.required) {
             messages.push('Значение не может быть пустым');
         }
 
