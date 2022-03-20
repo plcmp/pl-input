@@ -20,6 +20,7 @@ class PlInput extends PlElement {
             max: { type: Number },
             step: { type: String },
 
+            readonly: { type: Boolean },
             required: { type: Boolean, observer: '_requiredObserver' },
             invalid: { type: Boolean },
 
@@ -74,11 +75,11 @@ class PlInput extends PlElement {
 				color: inherit;
 				border: none;
                 outline:none;
-				padding: 0px;
-                font-size: 14px;
+				padding: 0;
 				width: 100%;
 				height: 100%;
-                font: var(--font-md);
+                font: var(--text-font);
+                color: var(--text-color);
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
@@ -86,17 +87,17 @@ class PlInput extends PlElement {
 
 			.input-container {
                 display: flex;
-				height: 32px;
+				height: var(--base-size-md);
 				width: 100%;
                 flex-direction: row;
                 box-sizing: border-box;
 				overflow: hidden;
 				border: 1px solid var(--grey-light);
-				border-radius: 4px;
-				padding: 0 12px;
+				border-radius: var(--border-radius);
+				padding: 0 var(--space-sm);
                 position: relative;
                 transition: all .3s ease-in-out;
-                background: white;
+                background: var(--surface-color);
 			}
 
             .input-container::before {
@@ -109,10 +110,10 @@ class PlInput extends PlElement {
             }
 
             .input-container.required::before {
-                border-top: 8px solid var(--attention-light);
-                border-left: 8px  solid var(--attention-light);
-                border-bottom: 8px solid transparent;
-                border-right: 8px solid transparent;
+				border-top: calc(var(--space-md) / 2) solid var(--attention);
+				border-left: calc(var(--space-md) / 2)  solid var(--attention);
+				border-bottom: calc(var(--space-md) / 2) solid transparent;
+				border-right: calc(var(--space-md) / 2) solid transparent;
             }
 
 			::placeholder {
@@ -127,11 +128,11 @@ class PlInput extends PlElement {
 
             :host .prefix ::slotted(*) {
                 align-self: center;
-				margin-right: 8px;
-				margin-left: 0px;
+				margin-right: var(--space-sm);
+				margin-left: 0;
                 color: var(--grey-dark);
-				width: 16px;
-				height: 16px;
+				width: var(--base-size-xxs);
+				height: var(--base-size-xxs);
             }
 
 			.suffix {
@@ -142,11 +143,11 @@ class PlInput extends PlElement {
 
             :host .suffix ::slotted(*) {
                 align-self: center;
-				margin-right: 0px;
-				margin-left: 8px;
+				margin-right: 0;
+				margin-left: var(--space-sm);
                 color: var(--grey-dark);
-				width: 16px;
-				height: 16px;
+				width: var(--base-size-xxs);
+				height: var(--base-size-xxs);
             }
 
             :host([disabled]) {
@@ -185,7 +186,7 @@ class PlInput extends PlElement {
                     </span>
                     <input value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
                         title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
-                        tabindex$="[[_getTabIndex(disabled)]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
+                        tabindex$="[[_getTabIndex(disabled)]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
                     <span class="suffix">
                         <slot name="suffix"></slot>
                     </span>
@@ -280,7 +281,7 @@ class PlInput extends PlElement {
             }
         }
 
-        if (!value && this.required) {
+        if ((value == '' || value === null || value == undefined) && this.required) {
             messages.push('Значение не может быть пустым');
         }
 
