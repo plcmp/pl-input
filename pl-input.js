@@ -97,7 +97,7 @@ class PlInput extends PlElement {
 				padding: 0 var(--space-sm);
                 position: relative;
                 transition: all .3s ease-in-out;
-                background: var(--surface-color);
+                background: var(--background-color);
 			}
 
             .input-container::before {
