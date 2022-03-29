@@ -71,7 +71,7 @@ class PlInput extends PlElement {
             }
 
 			input {
-				background: inherit;
+                background: var(--background-color);
 				color: inherit;
 				border: none;
                 outline:none;
@@ -83,6 +83,7 @@ class PlInput extends PlElement {
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
+                padding: 0 var(--space-sm);
 			}
 
 			.input-container {
@@ -94,10 +95,8 @@ class PlInput extends PlElement {
 				overflow: hidden;
 				border: 1px solid var(--grey-light);
 				border-radius: var(--border-radius);
-				padding: 0 var(--space-sm);
                 position: relative;
                 transition: all .3s ease-in-out;
-                background: var(--background-color);
 			}
 
             .input-container::before {
@@ -124,30 +123,27 @@ class PlInput extends PlElement {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                height: 100%;
+                background: var(--background-color);
             }
 
             :host .prefix ::slotted(*) {
                 align-self: center;
-				margin-right: var(--space-sm);
-				margin-left: 0;
                 color: var(--grey-dark);
-				width: var(--base-size-xxs);
-				height: var(--base-size-xxs);
             }
 
 			.suffix {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                padding-right: 8px;
+                height: 100%;
+                background: var(--background-color);
             }
 
             :host .suffix ::slotted(*) {
                 align-self: center;
-				margin-right: 0;
-				margin-left: var(--space-sm);
                 color: var(--grey-dark);
-				width: var(--base-size-xxs);
-				height: var(--base-size-xxs);
             }
 
             :host([disabled]) {
@@ -157,9 +153,9 @@ class PlInput extends PlElement {
 				user-select: none;
             }
 
-            :host([disabled]) .input-container,
-			:host([disabled]) .prefix ::slotted(*),
-			:host([disabled]) .suffix ::slotted(*),
+            :host([disabled]) .input-container input,
+			:host([disabled]) .prefix,
+			:host([disabled]) .suffix,
 			:host([disabled]) ::placeholder {
 				color: var(--grey-base);
                 background: var(--grey-lightest);
