@@ -115,6 +115,11 @@ class PlInput extends PlElement {
 				border-right: calc(var(--space-md) / 2) solid transparent;
             }
 
+            input::-ms-reveal,
+            input::-ms-clear {
+              display: none;
+            }
+
 			::placeholder {
 				color: var(--grey-dark);
 			}
