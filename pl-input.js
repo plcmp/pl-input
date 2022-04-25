@@ -71,7 +71,6 @@ class PlInput extends PlElement {
             }
 
 			input {
-                background: var(--background-color);
 				color: inherit;
 				border: none;
                 outline:none;
@@ -83,7 +82,6 @@ class PlInput extends PlElement {
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
-                padding: 0 var(--space-sm);
 			}
 
 			.input-container {
@@ -97,6 +95,9 @@ class PlInput extends PlElement {
 				border-radius: var(--border-radius);
                 position: relative;
                 transition: all .3s ease-in-out;
+                gap: 8px;
+                padding: 0 var(--space-sm);
+                background: var(--background-color);
 			}
 
             .input-container::before {
@@ -104,15 +105,23 @@ class PlInput extends PlElement {
                 display: block;
                 position: absolute;
                 box-sizing: border-box;
-                top: 0;
-                left: 0;
+                inset-block-start: 0;
+                inset-inline-start: 0;
+            }
+
+            ::slotted(*) {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                background: var(--background-color);
             }
 
             .input-container.required::before {
-				border-top: calc(var(--space-md) / 2) solid var(--attention);
-				border-left: calc(var(--space-md) / 2)  solid var(--attention);
-				border-bottom: calc(var(--space-md) / 2) solid transparent;
-				border-right: calc(var(--space-md) / 2) solid transparent;
+				border-block-start: calc(var(--space-md) / 2) solid var(--attention);
+				border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
+				border-inline-end: calc(var(--space-md) / 2) solid transparent;
+				border-block-end: calc(var(--space-md) / 2) solid transparent;
             }
 
             input::-ms-reveal,
@@ -123,33 +132,6 @@ class PlInput extends PlElement {
 			::placeholder {
 				color: var(--grey-dark);
 			}
-
-			.prefix {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100%;
-                background: var(--background-color);
-            }
-
-            :host .prefix ::slotted(*) {
-                align-self: center;
-                color: var(--grey-dark);
-            }
-
-			.suffix {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding-right: 8px;
-                height: 100%;
-                background: var(--background-color);
-            }
-
-            :host .suffix ::slotted(*) {
-                align-self: center;
-                color: var(--grey-dark);
-            }
 
             :host([disabled]) {
                 color: var(--grey-base);
@@ -182,19 +164,15 @@ class PlInput extends PlElement {
             <pl-labeled-container variant="[[variant]]" label="[[label]]">
                 <slot name="label-prefix" slot="label-prefix"></slot>
                 <div class="input-container">
-                    <span class="prefix">
-                        <slot name="prefix"></slot>
-                    </span>
+                    <slot name="prefix"></slot>
                     <input value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
                         title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
                         tabindex$="[[_getTabIndex(disabled)]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
-                    <span class="suffix">
-                        <slot name="suffix"></slot>
-                    </span>
-                    <slot></slot>
+                    <slot name="suffix"></slot>
                 </div>
                 <slot name="label-suffix" slot="label-suffix"></slot>
             </pl-labeled-container>
+            <slot></slot>
 		`;
     }
 
