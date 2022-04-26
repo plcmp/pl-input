@@ -140,9 +140,9 @@ class PlInput extends PlElement {
 				user-select: none;
             }
 
+            :host([disabled]) .input-container,
             :host([disabled]) .input-container input,
-			:host([disabled]) .prefix,
-			:host([disabled]) .suffix,
+			:host([disabled]) ::slotted(*),
 			:host([disabled]) ::placeholder {
 				color: var(--grey-base);
                 background: var(--grey-lightest);
