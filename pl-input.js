@@ -35,7 +35,8 @@ class PlInput extends PlElement {
             :host {
                 display: flex;
                 outline: none;
-                width: var(--content-width);
+                max-width: var(--content-width);
+                width: 100%;
             }
 
             :host([hidden]) {
@@ -43,11 +44,11 @@ class PlInput extends PlElement {
             }
 
             :host([variant=horizontal]) {
-                width: calc(var(--label-width) + var(--content-width));
+                max-width: calc(var(--label-width) + var(--content-width));
             }
 
             :host([stretch]) {
-                width: 100%;
+                max-width: 100%;
             }
 
             :host(:hover) .input-container, :host(:hover) .input-container.required.invalid{
@@ -74,7 +75,7 @@ class PlInput extends PlElement {
 				color: inherit;
 				border: none;
                 outline:none;
-				padding: 0;
+                padding: 0;
 				width: 100%;
 				height: 100%;
                 font: var(--text-font);
@@ -117,6 +118,14 @@ class PlInput extends PlElement {
                 background: var(--background-color);
             }
 
+            input:-webkit-autofill,
+            input:-webkit-autofill:hover,
+            input:-webkit-autofill:focus,
+            input:-webkit-autofill:active,
+            input:-internal-autofill-selected {
+                -webkit-box-shadow: 0 0 0px 1000px var(--background-color) inset !important;
+            }
+                        
             .input-container.required::before {
 				border-block-start: calc(var(--space-md) / 2) solid var(--attention);
 				border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
