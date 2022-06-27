@@ -7,9 +7,14 @@ class PlInput extends PlElement {
     static get properties() {
         return {
             label: { type: String },
-            variant: { type: String, variant: 'vertical', reflectToAttribute: true },
+            variant: { type: String, observer: '_variantObserver' },
+            orientation: { type: String },
+
             type: { type: String, value: 'text' },
             value: { type: String, observer: '_valueObserver' },
+            contentWidth: { type: Number },
+            labelWidth: { type: Number },
+
             title: { type: String },
 
             placeholder: { type: String, value: '' },
@@ -32,30 +37,23 @@ class PlInput extends PlElement {
 
     static get css() {
         return css`
-            :host {
-                display: flex;
-                outline: none;
-                max-width: var(--content-width);
-                width: 100%;
-            }
-
             :host([hidden]) {
                 display: none;
             }
 
-            :host([variant=horizontal]) {
-                max-width: calc(var(--label-width) + var(--content-width));
-            }
-
             :host([stretch]) {
-                max-width: 100%;
+                width: 100%;
             }
 
-            :host(:hover) .input-container, :host(:hover) .input-container.required.invalid{
+            :host([stretch]) pl-labeled-container{
+                width: 100%;
+            }
+
+            :host(:hover) .input-container {
                 border: 1px solid var(--primary-dark);
 			}
 
-            :host(:active) .input-container, :host(:active) .input-container.required.invalid{
+            :host(:active) .input-container {
                 border: 1px solid var(--primary-base);
 			}
 
@@ -67,15 +65,18 @@ class PlInput extends PlElement {
 				border: 1px solid var(--negative-base);
 			}
 
-            .input-container.required.invalid{
-                border: 1px solid var(--grey-light);
-            }
+            .input-container.invalid:focus-within {
+                border: 1px solid var(--negative-base);
+			}
+
+            .input-container.required.invalid {
+                border: 1px solid var(--grey-base);
+			}
 
 			input {
 				color: inherit;
 				border: none;
                 outline:none;
-                padding: 0;
 				width: 100%;
 				height: 100%;
                 font: var(--text-font);
@@ -83,6 +84,7 @@ class PlInput extends PlElement {
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
+                padding: 0 var(--space-sm);
 			}
 
 			.input-container {
@@ -92,12 +94,11 @@ class PlInput extends PlElement {
                 flex-direction: row;
                 box-sizing: border-box;
 				overflow: hidden;
-				border: 1px solid var(--grey-light);
+				border: 1px solid var(--grey-base);
 				border-radius: var(--border-radius);
                 position: relative;
                 transition: all .3s ease-in-out;
-                gap: 8px;
-                padding: 0 var(--space-sm);
+                padding: 0;
                 background: var(--background-color);
 			}
 
@@ -110,22 +111,30 @@ class PlInput extends PlElement {
                 inset-inline-start: 0;
             }
 
-            ::slotted(*) {
+            .prefix {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 height: 100%;
-                background: var(--background-color);
+                background: transparent;
             }
 
-            input:-webkit-autofill,
-            input:-webkit-autofill:hover,
-            input:-webkit-autofill:focus,
-            input:-webkit-autofill:active,
-            input:-internal-autofill-selected {
-                -webkit-box-shadow: 0 0 0px 1000px var(--background-color) inset !important;
+            :host .prefix ::slotted(*) {
+                align-self: center;
             }
-                        
+
+			.suffix {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                background: transparent;
+            }
+
+            :host .suffix ::slotted(*) {
+                align-self: center;
+            }
+
             .input-container.required::before {
 				border-block-start: calc(var(--space-md) / 2) solid var(--attention);
 				border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
@@ -156,30 +165,26 @@ class PlInput extends PlElement {
 				color: var(--grey-base);
                 background: var(--grey-lightest);
             }
-
-            pl-labeled-container {
-                width: inherit;
-                position: relative;
-            }
     	`;
     }
 
-    _requiredObserver() {
-        this.validate();
-    }
 
     static get template() {
         return html`
-            <pl-labeled-container variant="[[variant]]" label="[[label]]">
+            <pl-labeled-container orientation="[[orientation]]" label="[[label]]" label-width="[[labelWidth]]" content-width="[[contentWidth]]">
                 <slot name="label-prefix" slot="label-prefix"></slot>
-                <div class="input-container">
-                    <slot name="prefix"></slot>
-                    <input value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
-                        title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
-                        tabindex$="[[_getTabIndex(disabled)]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]" on-input="[[_onInput]]">
-                    <slot name="suffix"></slot>
-                </div>
                 <slot name="label-suffix" slot="label-suffix"></slot>
+                <div class="input-container">
+                    <span class="prefix">
+                        <slot name="prefix"></slot>
+                    </span>
+                    <input value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]" title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
+                        tabindex$="[[_getTabIndex(disabled)]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]"
+                        on-input="[[_onInput]]">
+                    <span class="suffix">
+                        <slot name="suffix"></slot>
+                    </span>
+                </div>
             </pl-labeled-container>
             <slot></slot>
 		`;
@@ -194,6 +199,26 @@ class PlInput extends PlElement {
         this.validators.push(this.defaultValidators.bind(this));
 
         this.validate();
+
+        if (this.variant) {
+            console.log('Variant is deprecated, use orientation instead');
+            this.orientation = this.variant;
+        }
+    }
+
+    _requiredObserver() {
+        this.validate();
+    }
+
+    _valueObserver(value) {
+        this.validate();
+    }
+
+    _variantObserver(val) {
+        if (val) {
+            console.log('variant is deprecated, use orientation instead');
+            this.orientation = val;
+        }
     }
 
     _getTitle(val, title, type) {
@@ -204,9 +229,6 @@ class PlInput extends PlElement {
         return title || val || '';
     }
 
-    _valueObserver(value) {
-        this.validate();
-    }
     fixText(t) {
         if (t === undefined || t === null) return '';
         return t;
