@@ -77,29 +77,29 @@ class PlInput extends PlElement {
 				color: inherit;
 				border: none;
                 outline:none;
-				width: 100%;
+				flex: 1;
 				height: 100%;
                 font: var(--text-font);
                 color: var(--text-color);
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
-                padding: 0 var(--space-sm);
 			}
 
 			.input-container {
                 display: flex;
-				height: var(--base-size-md);
+				min-height: var(--base-size-md);
 				width: 100%;
                 flex-direction: row;
                 box-sizing: border-box;
-				overflow: hidden;
+                align-items: center;
+                overflow: hidden;
 				border: 1px solid var(--grey-base);
 				border-radius: var(--border-radius);
                 position: relative;
                 transition: all .3s ease-in-out;
-                padding: 0;
                 background: var(--background-color);
+                gap: 4px;
 			}
 
             .input-container::before {
@@ -133,6 +133,16 @@ class PlInput extends PlElement {
 
             :host .suffix ::slotted(*) {
                 align-self: center;
+            }
+
+            .input {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                box-sizing: border-box;
+                flex: 1;
+                padding: 4px 0;
+                min-width: 0px;
             }
 
             .input-container.required::before {
@@ -178,9 +188,12 @@ class PlInput extends PlElement {
                     <span class="prefix">
                         <slot name="prefix"></slot>
                     </span>
-                    <input value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]" title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
-                        tabindex$="[[_getTabIndex(disabled)]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]"
-                        on-input="[[_onInput]]">
+                    <div class="input">
+                        <slot name="input"></slot>
+                        <input value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]" title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
+                            tabindex$="[[_getTabIndex(disabled)]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]"
+                            on-input="[[_onInput]]">
+                    </div>
                     <span class="suffix">
                         <slot name="suffix"></slot>
                     </span>
