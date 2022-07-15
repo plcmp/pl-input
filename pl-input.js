@@ -4,209 +4,204 @@ import { debounce } from "@plcmp/utils";
 import "@plcmp/pl-labeled-container";
 
 class PlInput extends PlElement {
-    static get properties() {
-        return {
-            label: { type: String },
-            variant: { type: String, observer: '_variantObserver' },
-            orientation: { type: String },
+    static properties = {
+        label: { type: String },
+        variant: { type: String, observer: '_variantObserver' },
+        orientation: { type: String },
 
-            type: { type: String, value: 'text' },
-            value: { type: String, observer: '_valueObserver' },
-            contentWidth: { type: Number },
-            labelWidth: { type: Number },
+        type: { type: String, value: 'text' },
+        value: { type: String, observer: '_valueObserver' },
+        contentWidth: { type: Number },
+        labelWidth: { type: Number },
 
-            title: { type: String },
+        title: { type: String },
 
-            placeholder: { type: String, value: '' },
+        placeholder: { type: String, value: '' },
 
-            pattern: { type: String },
+        pattern: { type: String },
 
-            min: { type: Number },
-            max: { type: Number },
-            step: { type: String },
+        min: { type: Number },
+        max: { type: Number },
+        step: { type: String },
 
-            readonly: { type: Boolean },
-            required: { type: Boolean, observer: '_requiredObserver' },
-            invalid: { type: Boolean },
+        readonly: { type: Boolean },
+        required: { type: Boolean, observer: '_requiredObserver' },
+        invalid: { type: Boolean },
 
-            disabled: { type: Boolean, reflectToAttribute: true },
-            stretch: { type: Boolean, reflectToAttribute: true },
-            hidden: { type: Boolean, reflectToAttribute: true }
-        };
-    }
+        disabled: { type: Boolean, reflectToAttribute: true },
+        stretch: { type: Boolean, reflectToAttribute: true },
+        hidden: { type: Boolean, reflectToAttribute: true }
+    };
 
-    static get css() {
-        return css`
-            :host([hidden]) {
-                display: none;
-            }
+    static css = css`
+        :host([hidden]) {
+            display: none;
+        }
 
-            :host([stretch]) {
-                width: 100%;
-            }
+        :host([stretch]) {
+            width: 100%;
+        }
 
-            :host([stretch]) pl-labeled-container{
-                width: 100%;
-            }
+        :host([stretch]) pl-labeled-container{
+            width: 100%;
+        }
 
-            :host(:hover) .input-container {
-                border: 1px solid var(--primary-dark);
-			}
+        :host(:hover) .input-container {
+            border: 1px solid var(--primary-dark);
+        }
 
-            :host(:active) .input-container {
-                border: 1px solid var(--primary-base);
-			}
+        :host(:active) .input-container {
+            border: 1px solid var(--primary-base);
+        }
 
-			.input-container:focus-within, .input-container.required.invalid:focus-within{
-                border: 1px solid var(--primary-base);
-			}
+        .input-container:focus-within, .input-container.required.invalid:focus-within{
+            border: 1px solid var(--primary-base);
+        }
 
-			.input-container.invalid {
-				border: 1px solid var(--negative-base);
-			}
+        .input-container.invalid {
+            border: 1px solid var(--negative-base);
+        }
 
-            .input-container.invalid:focus-within {
-                border: 1px solid var(--negative-base);
-			}
+        .input-container.invalid:focus-within {
+            border: 1px solid var(--negative-base);
+        }
 
-            .input-container.required.invalid {
-                border: 1px solid var(--grey-base);
-			}
+        .input-container.required.invalid {
+            border: 1px solid var(--grey-base);
+        }
 
-			input {
-				color: inherit;
-				border: none;
-                outline:none;
-				flex: 1;
-				height: 100%;
-                font: var(--text-font);
-                color: var(--text-color);
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-			}
+        input {
+            color: inherit;
+            border: none;
+            outline:none;
+            flex: 1;
+            height: 100%;
+            font: var(--text-font);
+            color: var(--text-color);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
 
-			.input-container {
-                display: flex;
-				min-height: var(--base-size-md);
-				width: 100%;
-                flex-direction: row;
-                box-sizing: border-box;
-                align-items: center;
-                overflow: hidden;
-				border: 1px solid var(--grey-base);
-				border-radius: var(--border-radius);
-                position: relative;
-                transition: all .3s ease-in-out;
-                background: var(--background-color);
-                gap: 4px;
-			}
+        .input-container {
+            display: flex;
+            min-height: var(--base-size-md);
+            width: 100%;
+            flex-direction: row;
+            box-sizing: border-box;
+            align-items: center;
+            overflow: hidden;
+            border: 1px solid var(--grey-base);
+            border-radius: var(--border-radius);
+            position: relative;
+            transition: all .3s ease-in-out;
+            background: var(--background-color);
+            gap: 4px;
+        }
 
-            .input-container::before {
-                content: '';
-                display: block;
-                position: absolute;
-                box-sizing: border-box;
-                inset-block-start: 0;
-                inset-inline-start: 0;
-            }
+        .input-container::before {
+            content: '';
+            display: block;
+            position: absolute;
+            box-sizing: border-box;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+        }
 
-            .prefix {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100%;
-                background: transparent;
-            }
+        .prefix {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: transparent;
+        }
 
-            :host .prefix ::slotted(*) {
-                align-self: center;
-            }
+        :host .prefix ::slotted(*) {
+            align-self: center;
+        }
 
-			.suffix {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100%;
-                background: transparent;
-            }
+        .suffix {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: transparent;
+        }
 
-            :host .suffix ::slotted(*) {
-                align-self: center;
-            }
+        :host .suffix ::slotted(*) {
+            align-self: center;
+        }
 
-            .input {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 4px;
-                box-sizing: border-box;
-                flex: 1;
-                padding: 4px 0;
-                min-width: 0px;
-            }
+        .input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            box-sizing: border-box;
+            flex: 1;
+            padding: 4px 0;
+            min-width: 0px;
+        }
 
-            .input-container.required::before {
-				border-block-start: calc(var(--space-md) / 2) solid var(--attention);
-				border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
-				border-inline-end: calc(var(--space-md) / 2) solid transparent;
-				border-block-end: calc(var(--space-md) / 2) solid transparent;
-            }
+        .input-container.required::before {
+            border-block-start: calc(var(--space-md) / 2) solid var(--attention);
+            border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
+            border-inline-end: calc(var(--space-md) / 2) solid transparent;
+            border-block-end: calc(var(--space-md) / 2) solid transparent;
+        }
 
-            input::-ms-reveal,
-            input::-ms-clear {
-              display: none;
-            }
+        input::-ms-reveal,
+        input::-ms-clear {
+            display: none;
+        }
 
-			::placeholder {
-				color: var(--grey-dark);
-			}
+        ::placeholder {
+            color: var(--grey-dark);
+        }
 
-            :host([disabled]) {
-                color: var(--grey-base);
-                cursor: not-allowed;
-                pointer-events: none;
-				user-select: none;
-            }
+        :host([disabled]) {
+            color: var(--grey-base);
+            cursor: not-allowed;
+            pointer-events: none;
+            user-select: none;
+        }
 
-            :host([disabled]) .input-container,
-            :host([disabled]) .input-container input,
-			:host([disabled]) ::slotted(*),
-			:host([disabled]) ::placeholder {
-				color: var(--grey-base);
-                background: var(--grey-lightest);
-            }
-    	`;
-    }
+        :host([disabled]) .input-container,
+        :host([disabled]) .input-container input,
+        :host([disabled]) ::slotted(*),
+        :host([disabled]) ::placeholder {
+            color: var(--grey-base);
+            background: var(--grey-lightest);
+        }
+    `;
 
-
-    static get template() {
-        return html`
-            <pl-labeled-container orientation="[[orientation]]" label="[[label]]" label-width="[[labelWidth]]" content-width="[[contentWidth]]">
-                <slot name="label-prefix" slot="label-prefix"></slot>
-                <slot name="label-suffix" slot="label-suffix"></slot>
-                <div class="input-container">
-                    <span class="prefix">
-                        <slot name="prefix"></slot>
-                    </span>
-                    <div class="input">
-                        <slot name="input"></slot>
-                        <input value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]" title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
-                            tabindex$="[[_getTabIndex(disabled)]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]"
-                            on-input="[[_onInput]]">
-                    </div>
-                    <span class="suffix">
-                        <slot name="suffix"></slot>
-                    </span>
+    static template = html`
+        <pl-labeled-container orientation="[[orientation]]" label="[[label]]" label-width="[[labelWidth]]"
+            content-width="[[contentWidth]]">
+            <slot name="label-prefix" slot="label-prefix"></slot>
+            <slot name="label-suffix" slot="label-suffix"></slot>
+            <div id="inputContainer" class="input-container">
+                <span class="prefix">
+                    <slot name="prefix"></slot>
+                </span>
+                <div class="input">
+                    <slot name="input"></slot>
+                    <input id="nativeInput" value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
+                        title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
+                        tabindex$="[[_getTabIndex(disabled)]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]"
+                        on-input="[[_onInput]]">
                 </div>
-            </pl-labeled-container>
-            <slot></slot>
-		`;
-    }
+                <span class="suffix">
+                    <slot name="suffix"></slot>
+                </span>
+            </div>
+        </pl-labeled-container>
+        <slot></slot>
+    `;
 
     connectedCallback() {
         super.connectedCallback();
-        this._nativeInput = this.root.querySelector('input');
-        this._inputContainer = this.root.querySelector('.input-container');
+        this._nativeInput = this.$.nativeInput;
+        this._inputContainer = this.$.inputContainer;
         this.validators = [];
         this._validationResults = [];
         this.validators.push(this.defaultValidators.bind(this));
