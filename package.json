@@ -1,6 +1,6 @@
 {
     "name": "@plcmp/pl-input",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "description": "Simple input component.",
     "main": "pl-input.js",
     "repository": {
@@ -23,8 +23,8 @@
         }
     ],
     "dependencies": {
-        "polylib": "^1.0.0",
-        "@plcmp/pl-labeled-container": "^0.1.1",
+        "polylib": "^1.1.4",
+        "@plcmp/pl-labeled-container": "^0.1.7",
         "@plcmp/utils": "^0.1.0"
     }
 }
