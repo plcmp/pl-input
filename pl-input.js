@@ -159,7 +159,6 @@ class PlInput extends PlElement {
         }
 
         :host([disabled]) {
-            color: var(--grey-base);
             cursor: not-allowed;
             pointer-events: none;
             user-select: none;
@@ -169,8 +168,8 @@ class PlInput extends PlElement {
         :host([disabled]) .input-container input,
         :host([disabled]) ::slotted(*),
         :host([disabled]) ::placeholder {
-            color: var(--grey-base);
-            background: var(--grey-lightest);
+            color: var(--grey-darkest);
+            background: var(--grey-light);
         }
     `;
 
