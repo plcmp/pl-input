@@ -169,7 +169,7 @@ class PlInput extends PlElement {
         :host([disabled]) ::slotted(*),
         :host([disabled]) ::placeholder {
             color: var(--grey-darkest);
-            background: var(--grey-light);
+            background: var(--grey-lightest);
         }
     `;
 
