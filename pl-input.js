@@ -38,8 +38,14 @@ class PlInput extends PlElement {
             display: none;
         }
 
+        :host {
+            min-width: 0;
+            flex-shrink: 0;
+        }
+
         :host([stretch]) {
             width: 100%;
+            flex-shrink: 1;
         }
 
         :host([stretch]) pl-labeled-container{
