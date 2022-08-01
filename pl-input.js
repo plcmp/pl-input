@@ -124,6 +124,7 @@ class PlInput extends PlElement {
 
         :host .prefix ::slotted(*) {
             align-self: center;
+            max-height: calc(var(--base-size-md) - 2px);
         }
 
         .suffix {
@@ -136,6 +137,7 @@ class PlInput extends PlElement {
 
         :host .suffix ::slotted(*) {
             align-self: center;
+            max-height: calc(var(--base-size-md) - 2px);
         }
 
         .input {
