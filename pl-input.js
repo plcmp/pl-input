@@ -304,7 +304,7 @@ class PlInput extends PlElement {
             }
         }
 
-        if ((value == '' || value === null || value == undefined) && this.required) {
+        if ((value === '' || value === null || value === undefined) && this.required) {
             messages.push('Значение не может быть пустым');
         }
 
