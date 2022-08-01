@@ -205,8 +205,6 @@ class PlInput extends PlElement {
 
     connectedCallback() {
         super.connectedCallback();
-        this._nativeInput = this.$.nativeInput;
-        this._inputContainer = this.$.inputContainer;
         this.validators = [];
         this._validationResults = [];
         this.validators.push(this.defaultValidators.bind(this));
@@ -249,9 +247,9 @@ class PlInput extends PlElement {
     _onInput() {
         let debouncer = debounce(() => {
             if (this.type == 'number') {
-                this.value = this._nativeInput.value !== '' ? this._nativeInput.valueAsNumber : null;
+                this.value = this.$.nativeInput.value !== '' ? this.$.nativeInput.valueAsNumber : null;
             } else {
-                this.value = this._nativeInput.value;
+                this.value = this.$.nativeInput.value;
             }
         }, 50)
         debouncer();
@@ -260,7 +258,7 @@ class PlInput extends PlElement {
     _onFocus() {
         if (this.type != 'number') {
             var length = this.value?.toString().length || 0;
-            this._nativeInput.setSelectionRange(length, length);
+            this.$.nativeInput.setSelectionRange(length, length);
         }
     }
 
@@ -269,17 +267,17 @@ class PlInput extends PlElement {
         this._validationResults = result.filter(x => x);
 
         if (this._validationResults.find(x => x.includes('Значение не может быть пустым'))) {
-            this._inputContainer.classList.add('required');
+            this.$.inputContainer.classList.add('required');
         } else {
-            this._inputContainer.classList.remove('required');
+            this.$.inputContainer.classList.remove('required');
         }
 
         this.invalid = this._validationResults.length > 0;
 
         if (this.invalid) {
-            this._inputContainer.classList.add('invalid');
+            this.$.inputContainer.classList.add('invalid');
         } else {
-            this._inputContainer.classList.remove('invalid');
+            this.$.inputContainer.classList.remove('invalid');
         }
 
         this.dispatchEvent(new CustomEvent('validation-changed', { bubbles: true, composed: true }))
