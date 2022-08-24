@@ -179,6 +179,18 @@ class PlInput extends PlElement {
             color: var(--grey-darkest);
             background: var(--grey-lightest);
         }
+
+        input[type="color"] {
+            border: none;
+            height: calc(var(--base-size-md) / 2);
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+        }
     `;
 
     static template = html`
@@ -258,7 +270,7 @@ class PlInput extends PlElement {
     }
 
     _onFocus() {
-        if (this.type != 'number') {
+        if (this.type != 'number' && this.type != 'color') {
             var length = this.value?.toString().length || 0;
             this.$.nativeInput.setSelectionRange(length, length);
         }
