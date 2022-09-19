@@ -24,11 +24,11 @@ class PlInput extends PlElement {
         max: { type: Number },
         step: { type: String },
 
-        readonly: { type: Boolean },
+        readonly: { type: Boolean, observer: '_readonlyObserver' },
         required: { type: Boolean, observer: '_requiredObserver' },
         invalid: { type: Boolean },
 
-        disabled: { type: Boolean, reflectToAttribute: true },
+        disabled: { type: Boolean, reflectToAttribute: true, observer: '_disabledObserver' },
         stretch: { type: Boolean, reflectToAttribute: true },
         hidden: { type: Boolean, reflectToAttribute: true }
     };
@@ -239,6 +239,14 @@ class PlInput extends PlElement {
         this.validate();
     }
 
+    _readonlyObserver() {
+        this.validate();
+    }
+
+    _disabledObserver() {
+        this.validate();
+    }
+
     _variantObserver(val) {
         if (val) {
             console.log('variant is deprecated, use orientation instead');
@@ -258,6 +266,7 @@ class PlInput extends PlElement {
         if (t === undefined || t === null) return '';
         return t;
     }
+    
     _onInput() {
         let debouncer = debounce(() => {
             if (this.type == 'number') {
@@ -270,9 +279,11 @@ class PlInput extends PlElement {
     }
 
     _onFocus() {
-        if (this.type != 'number' && this.type != 'color') {
+        if (this.type != 'number') {
             var length = this.value?.toString().length || 0;
-            this.$.nativeInput.setSelectionRange(length, length);
+            if(this.$.nativeInput.setSelectionRange) {
+                this.$.nativeInput.setSelectionRange(length, length);
+            }
         }
     }
 
@@ -280,13 +291,12 @@ class PlInput extends PlElement {
         const result = await Promise.all(this.validators.map(x => x(this.value)));
         this._validationResults = result.filter(x => x);
 
-        if (this._validationResults.find(x => x.includes('Значение не может быть пустым'))) {
+        this.invalid = this._validationResults.length > 0 && !this.disabled && !this.readonly
+        if (this.invalid && this._validationResults.find(x => x.includes('Значение не может быть пустым'))) {
             this.$.inputContainer.classList.add('required');
         } else {
             this.$.inputContainer.classList.remove('required');
         }
-
-        this.invalid = this._validationResults.length > 0;
 
         if (this.invalid) {
             this.$.inputContainer.classList.add('invalid');
@@ -307,11 +317,11 @@ class PlInput extends PlElement {
         }
 
         if (this.type == 'number' && !Number.isNaN(value) && value) {
-            if (this.min && parseInt(this.min) > value) {
+            if (this.min && parseFloat(this.min) > value) {
                 messages.push(`Значение превышает минимальное значение равное ${this.min}`);
             }
 
-            if (this.max && parseInt(this.max) < value && value) {
+            if (this.max && parseFloat(this.max) < value && value) {
                 messages.push(`Значение превышает максимальное значение равное ${this.max}`);
             }
         }
