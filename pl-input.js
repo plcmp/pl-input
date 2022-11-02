@@ -24,7 +24,7 @@ class PlInput extends PlElement {
         max: { type: Number },
         step: { type: String },
 
-        readonly: { type: Boolean, observer: '_readonlyObserver' },
+        readonly: { type: Boolean },
         required: { type: Boolean, observer: '_requiredObserver' },
         invalid: { type: Boolean },
 
@@ -239,10 +239,6 @@ class PlInput extends PlElement {
         this.validate();
     }
 
-    _readonlyObserver() {
-        this.validate();
-    }
-
     _disabledObserver() {
         this.validate();
     }
@@ -291,7 +287,7 @@ class PlInput extends PlElement {
         const result = await Promise.all(this.validators.map(x => x(this.value)));
         this._validationResults = result.filter(x => x);
 
-        this.invalid = this._validationResults.length > 0 && !this.disabled && !this.readonly
+        this.invalid = this._validationResults.length > 0 && !this.disabled
         if (this.invalid && this._validationResults.find(x => x.includes('Значение не может быть пустым'))) {
             this.$.inputContainer.classList.add('required');
         } else {
