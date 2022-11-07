@@ -143,11 +143,11 @@ class PlInput extends PlElement {
         .input {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
             box-sizing: border-box;
             flex: 1;
             padding: 4px 0;
             min-width: 0px;
+            align-items: center;
         }
 
         .input-container.required::before {
