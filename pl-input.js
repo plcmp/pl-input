@@ -6,7 +6,6 @@ import "@plcmp/pl-labeled-container";
 class PlInput extends PlElement {
     static properties = {
         label: { type: String },
-        variant: { type: String, observer: '_variantObserver' },
         orientation: { type: String },
 
         type: { type: String, value: 'text' },
@@ -52,11 +51,11 @@ class PlInput extends PlElement {
             width: 100%;
         }
 
-        :host(:hover) .input-container {
+        :host([:not(disabled)]:hover) .input-container {
             border: 1px solid var(--primary-dark);
         }
 
-        :host(:active) .input-container {
+        :host([:not(disabled)]:active) .input-container {
             border: 1px solid var(--primary-base);
         }
 
@@ -166,18 +165,14 @@ class PlInput extends PlElement {
             color: var(--grey-dark);
         }
 
-        :host([disabled]) {
-            cursor: not-allowed;
-            pointer-events: none;
-            user-select: none;
-        }
-
         :host([disabled]) .input-container,
         :host([disabled]) .input-container input,
         :host([disabled]) ::slotted(*),
         :host([disabled]) ::placeholder {
             color: var(--grey-darkest);
             background: var(--grey-lightest);
+            cursor: not-allowed;
+            user-select: none;
         }
 
         input[type="color"] {
@@ -206,7 +201,7 @@ class PlInput extends PlElement {
                     <slot name="input"></slot>
                     <input id="nativeInput" value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
                         title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
-                        tabindex$="[[_getTabIndex(disabled)]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]"
+                        tabindex$="[[_getTabIndex(disabled)]]" disabled$="[[disabled]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]"
                         on-input="[[_onInput]]">
                 </div>
                 <span class="suffix">
@@ -224,11 +219,6 @@ class PlInput extends PlElement {
         this.validators.push(this.defaultValidators.bind(this));
 
         this.validate();
-
-        if (this.variant) {
-            console.log('Variant is deprecated, use orientation instead');
-            this.orientation = this.variant;
-        }
     }
 
     _requiredObserver() {
@@ -242,14 +232,6 @@ class PlInput extends PlElement {
     _disabledObserver() {
         this.validate();
     }
-
-    _variantObserver(val) {
-        if (val) {
-            console.log('variant is deprecated, use orientation instead');
-            this.orientation = val;
-        }
-    }
-
     _getTitle(val, title, type) {
         if (type === 'password') {
             return '';
