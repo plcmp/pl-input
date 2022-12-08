@@ -101,7 +101,6 @@ class PlInput extends PlElement {
             position: relative;
             transition: all .3s ease-in-out;
             background: var(--background-color);
-            gap: 4px;
         }
 
         .input-container::before {
@@ -144,7 +143,7 @@ class PlInput extends PlElement {
             flex-wrap: wrap;
             box-sizing: border-box;
             flex: 1;
-            padding: 4px 0;
+            padding: 4px;
             min-width: 0px;
             align-items: center;
         }
@@ -166,12 +165,19 @@ class PlInput extends PlElement {
         }
 
         :host([disabled]) .input-container,
-        :host([disabled]) .input-container input,
+        :host([disabled]) .input,
+        :host([disabled]) .input input,
         :host([disabled]) ::slotted(*),
         :host([disabled]) ::placeholder {
             color: var(--grey-darkest);
             background: var(--grey-lightest);
             cursor: not-allowed;
+            user-select: none;
+        }
+
+        :host([disabled]) .prefix, :host([disabled]) .suffix {
+            pointer-events: none;
+            transition: none;
             user-select: none;
         }
 
@@ -201,7 +207,7 @@ class PlInput extends PlElement {
                     <slot name="input"></slot>
                     <input id="nativeInput" value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
                         title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
-                        tabindex$="[[_getTabIndex(disabled)]]" disabled="[[disabled]]" readonly="[[readonly]]" on-focus="[[_onFocus]]"
+                        disabled="[[disabled]]" readonly="[[readonly]]" on-focus="[[_onFocus]]"
                         on-input="[[_onInput]]">
                 </div>
                 <span class="suffix">
@@ -231,6 +237,11 @@ class PlInput extends PlElement {
 
     _disabledObserver() {
         this.validate();
+        if(this.disabled) {
+            this.tabIndex = -1;
+        } else {
+            this.tabIndex = 0;
+        }
     }
     _getTitle(val, title, type) {
         if (type === 'password') {
@@ -309,10 +320,6 @@ class PlInput extends PlElement {
         }
 
         return messages.length > 0 ? messages.join(';') : undefined;
-    }
-
-    _getTabIndex(disabled) {
-        return disabled ? -1 : 0;
     }
 }
 
