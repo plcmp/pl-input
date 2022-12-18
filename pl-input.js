@@ -207,7 +207,7 @@ class PlInput extends PlElement {
                     <slot name="input"></slot>
                     <input id="nativeInput" value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
                         title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
-                        disabled="[[disabled]]" readonly="[[readonly]]" on-focus="[[_onFocus]]"
+                        disabled$="[[disabled]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]"
                         on-input="[[_onInput]]">
                 </div>
                 <span class="suffix">
