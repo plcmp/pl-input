@@ -140,7 +140,6 @@ class PlInput extends PlElement {
 
         .input {
             display: flex;
-            flex-wrap: wrap;
             box-sizing: border-box;
             flex: 1;
             padding: 4px;
