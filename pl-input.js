@@ -99,7 +99,7 @@ class PlInput extends PlElement {
             border: 1px solid var(--grey-base);
             border-radius: var(--border-radius);
             position: relative;
-            transition: all .3s ease-in-out;
+            transition: border .3s ease-in-out;
             background: var(--background-color);
         }
 
@@ -206,7 +206,7 @@ class PlInput extends PlElement {
                     <slot name="input"></slot>
                     <input id="nativeInput" value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
                         title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
-                        disabled$="[[disabled]]" readonly$="[[readonly]]" on-focus="[[_onFocus]]"
+                        disabled$="[[_toBool(disabled)]]" readonly$="[[_toBool(readonly)]]" on-focus="[[_onFocus]]"
                         on-input="[[_onInput]]">
                 </div>
                 <span class="suffix">
@@ -224,6 +224,10 @@ class PlInput extends PlElement {
         this.validators.push(this.defaultValidators.bind(this));
 
         this.validate();
+    }
+
+    _toBool(val) {
+        return !!val;
     }
 
     _requiredObserver() {
