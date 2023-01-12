@@ -86,6 +86,7 @@ class PlInput extends PlElement {
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+            background: transparent;
         }
 
         .input-container {
