@@ -272,7 +272,7 @@ class PlInput extends PlElement {
     }
 
     _onFocus() {
-        if (this.type != 'number') {
+        if (!['number', 'color'].includes(this.type)) {
             var length = this.value?.toString().length || 0;
             if(this.$.nativeInput.setSelectionRange) {
                 this.$.nativeInput.setSelectionRange(length, length);
