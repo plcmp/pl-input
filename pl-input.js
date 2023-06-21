@@ -309,12 +309,12 @@ class PlInput extends PlElement {
             }
         }
 
-        if (this.type == 'number' && !Number.isNaN(value) && value) {
+        if (this.type == 'number' && !Number.isNaN(value)) {
             if (this.min && parseFloat(this.min) > value) {
                 messages.push(`Значение превышает минимальное значение равное ${this.min}`);
             }
 
-            if (this.max && parseFloat(this.max) < value && value) {
+            if (this.max && parseFloat(this.max) < value) {
                 messages.push(`Значение превышает максимальное значение равное ${this.max}`);
             }
         }
