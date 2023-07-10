@@ -173,6 +173,7 @@ class PlInput extends PlElement {
             background: var(--grey-lightest);
             cursor: not-allowed;
             user-select: none;
+            --pl-icon-fill-color: var(--grey-darkest);
         }
 
         :host([disabled]) .prefix, :host([disabled]) .suffix {
