@@ -242,7 +242,7 @@ class PlInput extends PlElement {
 
     _disabledObserver() {
         this.validate();
-        if(this.disabled) {
+        if (this.disabled) {
             this.tabIndex = -1;
         } else {
             this.tabIndex = 0;
@@ -260,22 +260,19 @@ class PlInput extends PlElement {
         if (t === undefined || t === null) return '';
         return t;
     }
-    
-    _onInput() {
-        let debouncer = debounce(() => {
-            if (this.type == 'number') {
-                this.value = this.$.nativeInput.value !== '' ? this.$.nativeInput.valueAsNumber : null;
-            } else {
-                this.value = this.$.nativeInput.value;
-            }
-        }, 50)
-        debouncer();
-    }
+
+    _onInput = debounce(() => {
+        if (this.type == 'number') {
+            this.value = this.$.nativeInput.value !== '' ? this.$.nativeInput.valueAsNumber : null;
+        } else {
+            this.value = this.$.nativeInput.value;
+        }
+    }, 100);
 
     _onFocus() {
         if (!['number', 'color'].includes(this.type)) {
             var length = this.value?.toString().length || 0;
-            if(this.$.nativeInput.setSelectionRange) {
+            if (this.$.nativeInput.setSelectionRange) {
                 this.$.nativeInput.setSelectionRange(length, length);
             }
         }
