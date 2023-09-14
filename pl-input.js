@@ -79,7 +79,6 @@ class PlInput extends PlElement {
             color: inherit;
             border: none;
             outline:none;
-            flex: 1;
             height: 100%;
             font: var(--text-font);
             color: var(--text-color);
@@ -87,6 +86,8 @@ class PlInput extends PlElement {
             white-space: nowrap;
             overflow: hidden;
             background: transparent;
+            min-width: 0;
+            width: 100%;
         }
 
         .input-container {
@@ -200,13 +201,13 @@ class PlInput extends PlElement {
             content-width="[[contentWidth]]">
             <slot name="label-prefix" slot="label-prefix"></slot>
             <slot name="label-suffix" slot="label-suffix"></slot>
-            <div id="inputContainer" class="input-container">
+            <div id="inputContainer" class="input-container" part="input-container">
                 <span class="prefix">
                     <slot name="prefix"></slot>
                 </span>
                 <div class="input">
                     <slot name="input"></slot>
-                    <input id="nativeInput" value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
+                    <input part="native-input" id="nativeInput" value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
                         title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
                         disabled$="[[_toBool(disabled)]]" readonly$="[[_toBool(readonly)]]" on-focus="[[_onFocus]]"
                         on-input="[[_onInput]]">
@@ -267,7 +268,7 @@ class PlInput extends PlElement {
         } else {
             this.value = this.$.nativeInput.value;
         }
-    }, 400);
+    }, 300);
 
     _onFocus() {
         if (!['number', 'color'].includes(this.type)) {
