@@ -1,6 +1,6 @@
 {
     "name": "@plcmp/pl-input",
-    "version": "0.1.35",
+    "version": "0.1.36",
     "description": "Simple input component.",
     "main": "pl-input.js",
     "repository": {
