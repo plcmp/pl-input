@@ -197,7 +197,7 @@ class PlInput extends PlElement {
     `;
 
     static template = html`
-        <pl-labeled-container orientation="[[orientation]]" label="[[label]]" label-width="[[labelWidth]]"
+        <pl-labeled-container exportparts="label" part="labeled-container" orientation="[[orientation]]" label="[[label]]" label-width="[[labelWidth]]"
             content-width="[[contentWidth]]">
             <slot name="label-prefix" slot="label-prefix"></slot>
             <slot name="label-suffix" slot="label-suffix"></slot>
