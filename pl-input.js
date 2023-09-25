@@ -86,8 +86,6 @@ class PlInput extends PlElement {
             white-space: nowrap;
             overflow: hidden;
             background: transparent;
-            min-width: 0;
-            width: 100%;
         }
 
         .input-container {
