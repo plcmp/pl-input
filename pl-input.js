@@ -268,7 +268,7 @@ class PlInput extends PlElement {
         } else {
             this.value = this.$.nativeInput.value;
         }
-    }, 300);
+    }, 100);
 
     _onFocus() {
         if (!['number', 'color'].includes(this.type)) {
