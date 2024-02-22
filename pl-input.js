@@ -52,27 +52,27 @@ class PlInput extends PlElement {
         }
 
         :host([:not(disabled)]:hover) .input-container {
-            border: 1px solid var(--primary-dark);
+            border: 1px solid var(--pl-primary-dark);
         }
 
         :host([:not(disabled)]:active) .input-container {
-            border: 1px solid var(--primary-base);
+            border: 1px solid var(--pl-primary-base);
         }
 
         .input-container:focus-within, .input-container.required.invalid:focus-within{
-            border: 1px solid var(--primary-base);
+            border: 1px solid var(--pl-primary-base);
         }
 
         .input-container.invalid {
-            border: 1px solid var(--negative-base);
+            border: 1px solid var(--pl-negative-base);
         }
 
         .input-container.invalid:focus-within {
-            border: 1px solid var(--negative-base);
+            border: 1px solid var(--pl-negative-base);
         }
 
         .input-container.required.invalid {
-            border: 1px solid var(--grey-base);
+            border: 1px solid var(--pl-grey-base);
         }
 
         input {
@@ -80,29 +80,30 @@ class PlInput extends PlElement {
             border: none;
             outline:none;
             height: 100%;
-            font: var(--text-font);
-            color: var(--text-color);
+            font: var(--pl-text-font);
+            color: var(--pl-text-color);
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
             background: transparent;
             min-width: 0px;
             width: 100%;
+            padding: 0;
         }
 
         .input-container {
             display: flex;
-            min-height: var(--base-size-md);
+            min-height: var(--pl-base-size);
             width: 100%;
             flex-direction: row;
             box-sizing: border-box;
             align-items: center;
             overflow: hidden;
-            border: 1px solid var(--grey-base);
-            border-radius: var(--border-radius);
+            border: 1px solid var(--pl-grey-base);
+            border-radius: var(--pl-border-radius);
             position: relative;
             transition: border .3s ease-in-out;
-            background: var(--background-color);
+            background: var(--pl-background-color);
         }
 
         .input-container::before {
@@ -124,7 +125,7 @@ class PlInput extends PlElement {
 
         :host .prefix ::slotted(*) {
             align-self: center;
-            max-height: calc(var(--base-size-md) - 2px);
+            max-height: calc(var(--pl-base-size) - 2px);
         }
 
         .suffix {
@@ -137,23 +138,23 @@ class PlInput extends PlElement {
 
         :host .suffix ::slotted(*) {
             align-self: center;
-            max-height: calc(var(--base-size-md) - 2px);
+            max-height: calc(var(--pl-base-size) - 2px);
         }
 
         .input {
             display: flex;
             box-sizing: border-box;
             flex: 1;
-            padding: 4px;
+            padding: var(--pl-space-xs);
             min-width: 0px;
             align-items: center;
         }
 
         .input-container.required::before {
-            border-block-start: calc(var(--space-md) / 2) solid var(--attention);
-            border-inline-start: calc(var(--space-md) / 2)  solid var(--attention);
-            border-inline-end: calc(var(--space-md) / 2) solid transparent;
-            border-block-end: calc(var(--space-md) / 2) solid transparent;
+			border-block-start: calc(var(--pl-space-md) / 2) solid var(--pl-attention);
+			border-inline-start: calc(var(--pl-space-md) / 2)  solid var(--pl-attention);
+			border-inline-end: calc(var(--pl-space-md) / 2) solid transparent;
+			border-block-end: calc(var(--pl-space-md) / 2) solid transparent;
         }
 
         input::-ms-reveal,
@@ -162,7 +163,7 @@ class PlInput extends PlElement {
         }
 
         ::placeholder {
-            color: var(--grey-dark);
+            color: var(--pl-grey-dark);
         }
 
         :host([disabled]) .input-container,
@@ -170,11 +171,11 @@ class PlInput extends PlElement {
         :host([disabled]) .input input,
         :host([disabled]) ::slotted(*),
         :host([disabled]) ::placeholder {
-            color: var(--grey-darkest);
-            background: var(--grey-lightest);
+            color: var(--pl-grey-darkest);
+            background: var(--pl-grey-lightest);
             cursor: not-allowed;
             user-select: none;
-            --pl-icon-fill-color: var(--grey-darkest);
+            --pl-icon-fill-color: var(--pl-grey-darkest);
         }
 
         :host([disabled]) .prefix, :host([disabled]) .suffix {
@@ -183,10 +184,18 @@ class PlInput extends PlElement {
             user-select: none;
         }
 
+        input[type="range"] {
+            border: none;
+            height: calc(var(--pl-base-size) / 1.7);
+            padding: 0px;
+            border-radius: var(--pl-border-radius);
+        }
+
         input[type="color"] {
             border: none;
-            height: calc(var(--base-size-md) / 2);
-            padding: 0;
+            height: calc(var(--pl-base-size) / 1.7);
+            padding: 0px;
+            border-radius: var(--pl-border-radius);
         }
         input[type="color"]::-webkit-color-swatch-wrapper {
             padding: 0;
@@ -271,7 +280,7 @@ class PlInput extends PlElement {
     }, 100);
 
     _onFocus() {
-        if (!['number', 'color'].includes(this.type)) {
+        if (!['number', 'color', 'range'].includes(this.type)) {
             var length = this.value?.toString().length || 0;
             if (this.$.nativeInput.setSelectionRange) {
                 this.$.nativeInput.setSelectionRange(length, length);
