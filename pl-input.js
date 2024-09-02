@@ -27,6 +27,8 @@ class PlInput extends PlElement {
         required: { type: Boolean, observer: '_requiredObserver' },
         invalid: { type: Boolean },
 
+        autocomplete: { type: Boolean, value: false, reflectToAttribute: true },
+
         disabled: { type: Boolean, reflectToAttribute: true, observer: '_disabledObserver' },
         stretch: { type: Boolean, reflectToAttribute: true },
         hidden: { type: Boolean, reflectToAttribute: true }
@@ -219,7 +221,7 @@ class PlInput extends PlElement {
                     <input part="native-input" id="nativeInput" value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
                         title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
                         disabled$="[[_toBool(disabled)]]" readonly$="[[_toBool(readonly)]]" on-focus="[[_onFocus]]"
-                        on-input="[[_onInput]]">
+                        on-input="[[_onInput]]" autocomplete$="[[_toAutocomplete(autocomplete)]]">
                 </div>
                 <span class="suffix">
                     <slot name="suffix"></slot>
@@ -240,6 +242,9 @@ class PlInput extends PlElement {
 
     _toBool(val) {
         return !!val;
+    }
+    _toAutocomplete(val) {
+        return val ? 'on' : 'off';
     }
 
     _requiredObserver() {
