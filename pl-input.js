@@ -220,7 +220,7 @@ class PlInput extends PlElement {
                     <slot name="input"></slot>
                     <input part="native-input" id="nativeInput" value="[[fixText(value)]]" placeholder="[[placeholder]]" type="[[type]]"
                         title="[[_getTitle(value, title, type)]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
-                        disabled$="[[_toBool(disabled)]]" readonly$="[[_toBool(readonly)]]" on-focus="[[_onFocus]]"
+                        disabled$="[[_toBool(disabled)]]" readonly$="[[_toBool(readonly)]]" on-focus="[[_onFocus]]" on-blur="[[_onBlur]]"
                         on-input="[[_onInput]]" autocomplete$="[[_toAutocomplete(autocomplete)]]">
                 </div>
                 <span class="suffix">
@@ -277,12 +277,14 @@ class PlInput extends PlElement {
     }
 
     _onInput = debounce(() => {
-        if (this.type == 'number') {
-            this.value = this.$.nativeInput.value !== '' ? this.$.nativeInput.valueAsNumber : null;
-        } else {
-            this.value = this.$.nativeInput.value;
-        }
+        this.value = this.$.nativeInput.value;
     }, 100);
+
+    _onBlur() {
+        if (this.type === 'number') {
+            this.value = this.$.nativeInput.value !== '' ? this.$.nativeInput.valueAsNumber : null;
+        }
+    }
 
     _onFocus() {
         if (!['number', 'color', 'range'].includes(this.type)) {
